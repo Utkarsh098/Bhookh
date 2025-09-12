@@ -7,7 +7,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
 //GET /api/food/ [protected]
-router.get("/", authMiddleware.authUserMiddleware, foodController.listFood);
+router.get("/", authMiddleware.authUserMiddleware, foodController.getFoodItems);
 
 //POST /api/food/ [protected only food partners]
 router.post(

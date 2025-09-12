@@ -26,11 +26,16 @@ async function createFood(req, res) {
   });
 }
 
-async function listFood(req, res){
-    console.log("See the food list here");
+async function getFoodItems(req, res) {
+  const foodItems = await foodModel.find({});
+
+  res.status(200).json({
+    message: "List of all the food items will show here",
+    foodItems,
+  });
 }
 
 module.exports = {
   createFood,
-  listFood
+  getFoodItems,
 };

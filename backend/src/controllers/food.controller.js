@@ -1,4 +1,5 @@
 const foodModel = require("../models/food.model");
+const foodParterModel = require("../models/foodPartner.model");
 const storageService = require("../services/storage.service");
 const uuid = require("uuid");
 

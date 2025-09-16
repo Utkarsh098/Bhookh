@@ -5,8 +5,34 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const FoodPartnerRegister = () => {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const name = e.target.businessName.value;
+    const contactName = e.target.contactName.value;
+    const phone = e.target.phone.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const address = e.target.address.value;
+
+    const response = await axios.post(
+      "http://localhost:3000/api/auth/food-partner/register",
+      {
+        name,
+        email,
+        password,
+        phone,
+        address,
+        contactName,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    console.log(response.data);
+    navigate("/create-food");
   };
 
   return (
@@ -22,7 +48,7 @@ const FoodPartnerRegister = () => {
           </h1>
           <p className="auth-subtitle">Grow your business with our platform.</p>
         </header>
-        
+
         <nav className="auth-alt-action" style={{ marginTop: "-4px" }}>
           <strong style={{ fontWeight: 600 }}>Switch:</strong>{" "}
           <Link to="/user/register">User</Link> •{" "}

@@ -2,6 +2,7 @@ import React from "react";
 import "../../styles/auth-shared.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const UserLogin = () => {
       }
     );
     console.log(response.data);
+    toast.success("successfully logged in");
     navigate("/");
   };
 
@@ -64,6 +66,7 @@ const UserLogin = () => {
           <button className="auth-submit" type="submit">
             Sign In
           </button>
+          <Toaster />
         </form>
         <div className="auth-alt-action">
           New here? <a href="/user/register">Create account</a>

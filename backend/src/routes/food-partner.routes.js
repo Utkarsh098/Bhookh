@@ -1,7 +1,7 @@
 const express = require("express");
 const authMiddleware = require("../middlewares/auth.middleware");
 const foodPartnerController = require("../controllers/food-partner.controller");
-const router = express.router();
+const router = express.Router();
 
 //GET /api/food-partner/:id
 router.get(

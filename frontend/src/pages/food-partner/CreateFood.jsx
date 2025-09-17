@@ -4,6 +4,69 @@ import '../../styles/create-food.css';
 import { useNavigate } from 'react-router-dom';
 
 const CreateFood = () => {
+    const [ name, setName ] = useState('');
+    const [ description, setDescription ] = useState('');
+    const [ videoFile, setVideoFile ] = useState(null);
+    const [ videoURL, setVideoURL ] = useState('');
+    const [ fileError, setFileError ] = useState('');
+    const fileInputRef = useRef(null);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!videoFile) {
+            setVideoURL('');
+            return;
+        }
+        const url = URL.createObjectURL(videoFile);
+        setVideoURL(url);
+        return () => URL.revokeObjectURL(url);
+    }, [ videoFile ]);
+
+    const onFileChange = (e) => {
+        const file = e.target.files && e.target.files[ 0 ];
+        if (!file) { setVideoFile(null); setFileError(''); return; }
+        if (!file.type.startsWith('video/')) { setFileError('Please select a valid video file.'); return; }
+        setFileError('');
+        setVideoFile(file);
+    };
+
+    const onDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = e.dataTransfer?.files?.[ 0 ];
+        if (!file) { return; }
+        if (!file.type.startsWith('video/')) { setFileError('Please drop a valid video file.'); return; }
+        setFileError('');
+        setVideoFile(file);
+    };
+
+    const onDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const openFileDialog = () => fileInputRef.current?.click();
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append("video", videoFile);
+
+        const response = await axios.post("http://localhost:3000/api/food", formData, {
+            withCredentials: true,
+        })
+
+        console.log(response.data);
+        navigate("/"); // Redirect to home or another page after successful creation
+        // Optionally reset
+        // setName(''); setDescription(''); setVideoFile(null);
+    };
+
+    const isDisabled = useMemo(() => !name.trim() || !videoFile, [ name, videoFile ]);
 
     return (
         <div className="create-food-page">

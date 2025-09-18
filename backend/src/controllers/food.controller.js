@@ -89,7 +89,7 @@ async function saveFood(req, res) {
     });
 
     await foodModel.findByIdAndUpdate(foodId, {
-      $inc: { saveCount: -1 },
+      $inc: { savesCount: -1 },
     });
 
     res.status(200).json({
@@ -103,7 +103,7 @@ async function saveFood(req, res) {
   });
 
   await foodModel.findByIdAndUpdate(foodId, {
-    $inc: { saveCount: 1 },
+    $inc: { savesCount: 1 },
   });
 
   res.status(200).json({

@@ -1,5 +1,6 @@
 const foodModel = require("../models/food.model");
-const foodParterModel = require("../models/foodPartner.model");
+const likeModel = require("../models/likes.model");
+const saveModel = require("../models/saves.model");
 const storageService = require("../services/storage.service");
 const uuid = require("uuid");
 
@@ -36,7 +37,83 @@ async function getFoodItems(req, res) {
   });
 }
 
+async function likeFood(req, res) {
+  const { foodId } = req.body;
+  const user = req.user;
+
+  const isAlreadyLiked = await likeModel.findOne({
+    user: user._id,
+    food: foodId,
+  });
+
+  if (isAlreadyLiked) {
+    await likeModel.deleteOne({
+      user: user._id,
+      food: foodId,
+    });
+    await foodModel.findByIdAndUpdate(foodId, {
+      $inc: { likeCount: -1 },
+    });
+    res.status(200).json({
+      message: "Food Unliked successfully",
+    });
+  }
+
+  const like = await likeModel.create({
+    user: user._id,
+    food: foodId,
+  });
+
+  await foodModel.findByIdAndUpdate(foodId, {
+    $inc: { likeCount: 1 },
+  });
+
+  res.status(200).json({
+    message: "Food Liked successfully",
+  });
+}
+
+async function saveFood(req, res) {
+  const foodId = req.body;
+  const user = req.user;
+
+  const isSavedAlready = await saveModel.findOne({
+    food: foodId,
+    user: user._id,
+  });
+
+  if (isSavedAlready) {
+    await saveModel.deleteOne({
+      food: foodId,
+      user: user._id,
+    });
+
+    await foodModel.findByIdAndUpdate(foodId, {
+      $inc: { saveCount: -1 },
+    });
+
+    res.status(200).json({
+      message: "food Unsaved successfully",
+    });
+  }
+
+  const save = await saveModel.create({
+    user: user._id,
+    food: foodId,
+  });
+
+  await foodModel.findByIdAndUpdate(foodId, {
+    $inc: { saveCount: 1 },
+  });
+
+  res.status(200).json({
+    message: "Food Saved successfully",
+  });
+}
+
 module.exports = {
   createFood,
   getFoodItems,
+  likeFood,
+  saveFood,
 };

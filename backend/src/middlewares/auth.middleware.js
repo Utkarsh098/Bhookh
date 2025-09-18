@@ -45,7 +45,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
     next();
   } catch (err) {
     res.status(401).json({
-      message: `${err.message}\n This usually happens due to invalid token, please login again.`,
+      message: `${err.message}\n This usually happens due to invalid token, please login as a food partner again.`,
     });
   }
 }

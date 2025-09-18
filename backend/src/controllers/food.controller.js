@@ -54,8 +54,9 @@ async function likeFood(req, res) {
     await foodModel.findByIdAndUpdate(foodId, {
       $inc: { likeCount: -1 },
     });
-    res.status(200).json({
-      message: "Food Unliked successfully",
+
+    return res.status(200).json({
+      message: "Food unliked successfully",
     });
   }
 
@@ -68,13 +69,14 @@ async function likeFood(req, res) {
     $inc: { likeCount: 1 },
   });
 
-  res.status(200).json({
+  return res.status(200).json({
     message: "Food Liked successfully",
+    like,
   });
 }
 
 async function saveFood(req, res) {
-  const foodId = req.body;
+  const { foodId } = req.body;
   const user = req.user;
 
   const isSavedAlready = await saveModel.findOne({
@@ -92,7 +94,7 @@ async function saveFood(req, res) {
       $inc: { savesCount: -1 },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "food Unsaved successfully",
     });
   }
@@ -106,8 +108,9 @@ async function saveFood(req, res) {
     $inc: { savesCount: 1 },
   });
 
-  res.status(200).json({
+  return res.status(200).json({
     message: "Food Saved successfully",
+    save,
   });
 }
 

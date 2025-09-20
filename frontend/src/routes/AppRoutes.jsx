@@ -8,12 +8,15 @@ import NotFoundPage from "../pages/general/NotFoundPage";
 import Home from "../pages/general/Home";
 import CreateFood from "../pages/food-partner/CreateFood";
 import Profile from "../pages/food-partner/Profile";
+import BottomNav from "../components/BottomNav";
+import Saved from "../pages/general/Saved";
 
 const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<><Home /><BottomNav/></>} />
+        <Route path="/saved" element={<><Saved /><BottomNav/></>} />
         <Route path="/user/register" element={<UserRegister />} />
         <Route path="/user/login" element={<UserLogin />} />
         <Route
